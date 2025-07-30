@@ -1,0 +1,48 @@
+{
+    "name": "Video intro",
+    "settings": [
+        {
+            "type": "url",
+            "id": "intro_audio_file",
+            "label": "Background Audio"
+        },
+        {
+            "type": "url",
+            "id": "intro_desktop_video",
+            "label": "Desktop Video"
+        },
+        {
+            "type": "url",
+            "id": "intro_mobile_video",
+            "label": "Mobile Video"
+        },
+        {
+            "type": "range",
+            "id": "volume_intro",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "label": "Audio Volume",
+            "default": 20
+        },
+        {
+            "type": "header",
+            "content": "Video Intro Settings"
+        },
+        {
+            "type": "text",
+            "id": "intro_skip",
+            "label": "Skip Button Text",
+            "default": "Skip Intro",
+            "info": "Leave blank to hide the skip button"
+        },
+        {
+            "type": "color",
+            "id": "skip_color",
+            "label": "Skip Button Color",
+            "default": "#ffffff",
+            "info": "Color for the skip button text and border"
+        }
+    ]
+}

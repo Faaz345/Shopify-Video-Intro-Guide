@@ -1,0 +1,259 @@
+{% if settings.intro_desktop_video != blank %}
+<div id="shopi_video_intro">
+  <div id="just-black"></div>
+  {% if settings.intro_skip != blank %}
+    <button type="button" class="skip-button" onclick="skipVideoIntro()" aria-label="{{ settings.intro_skip }}">{{ settings.intro_skip }}</button>
+  {% endif %}
+  <div class="vi-intro-window">
+    <audio id="enter-sound">
+      <source src="{{ settings.intro_audio_file }}">
+    </audio>
+    <div id="package3" class="vi-animation-container vi-animation">
+      <video style='opacity:0;' class="vi-desktop-only vid" id="animation-desktop" muted="" playsinline="" webkit-playsinline="" onended="removeIntroWindow()" preload="auto">
+        <source src="{{ settings.intro_desktop_video }}">
+      </video>
+      <video style='opacity:0;' class="vi-mobile-only vid" id="animation-mobile" muted="" playsinline="" webkit-playsinline="" onended="removeIntroWindow()" preload="auto">
+        <source src="{{ settings.intro_mobile_video }}">
+      </video>
+    </div>
+  </div>
+</div>
+<style>
+#just-black {
+  position: absolute;
+  background: black;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;
+}
+.vi-desktop-only {
+  display: block;
+}
+.vi-mobile-only {
+  display: none;
+}
+.vi-intro-window {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+.vi-intro-window.show {
+  display: block;
+}
+.vi-intro-window.fade-out {
+  opacity: 0;
+  transition: opacity .5s linear;
+}
+/* showing */
+body.vi-video-active {
+  overflow: hidden;
+}
+.vi-animation-container {
+  width: 100%;
+  height: 100%;
+  z-index: 80;
+}
+.vi-animation-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 768px) {
+  .vi-desktop-only {
+    display: none !important;
+  }
+  .vi-mobile-only {
+    display: block;
+  }
+}
+.skip-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  color: {{ settings.skip_color | default: '#ffffff' }};
+  border: 1px solid {{ settings.skip_color | default: '#ffffff' }};
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 10001;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: auto;
+  display: block !important;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  opacity: 1;
+  visibility: visible;
+}
+.skip-button.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.skip-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+@media (max-width: 768px) {
+  .skip-button {
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid {{ settings.skip_color | default: '#ffffff' }};
+    min-width: auto;
+    text-align: center;
+    box-shadow: none;
+    letter-spacing: 0.5px;
+    font-weight: 300;
+    opacity: 0.8;
+  }
+  .skip-button:active {
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+  }
+}
+</style>
+
+<script>
+const justBlack = document.querySelector("#just-black");
+const enterSound = document.querySelector("#enter-sound");
+const introWindow = document.querySelector(".vi-intro-window");
+const animationVideoContainer = document.querySelector(".vi-animation");
+const animationVideo = document.querySelectorAll(".vi-animation video");
+const skipButton = document.querySelector(".skip-button");
+const volumeIntro = {{ settings.volume_intro }};
+let videoEnded = false;
+let videosLoaded = false;
+
+function checkConnectionSpeed() {
+  if ('connection' in navigator) {
+    const connection = navigator.connection;
+    if (connection.effectiveType === '3g' ||
+        connection.effectiveType === '2g' ||
+        connection.downlink < 10) {
+      sessionStorage.setItem("videoPlayed", true);
+      return true;
+    }
+    return false;
+  } else {
+    return false;
+  }
+}
+
+function preloadVideos() {
+  const videos = document.querySelectorAll('.vid');
+  let loadedCount = 0;
+  videos.forEach(video => {
+    video.addEventListener('loadeddata', () => {
+      loadedCount++;
+      if (loadedCount === videos.length) {
+        videosLoaded = true;
+      }
+    });
+    video.addEventListener('error', () => {
+      removeIntroWindow();
+    });
+    video.load();
+  });
+}
+
+function initializeVideoIntro() {
+  if (sessionStorage.getItem("videoPlayed"))
+    return;
+  if (!checkConnectionSpeed()) {
+    justBlack.style.display = 'block';
+    const videoLoadTimeout = setTimeout(() => {
+      removeIntroWindow();
+    }, 30000);
+    requestAnimationFrame(() => {
+      introWindow.style.display = 'block';
+      introWindow.classList.add('show');
+      document.querySelectorAll('.vid').forEach(vid => {
+        vid.style.opacity = '1';
+        vid.addEventListener('error', () => {
+          clearTimeout(videoLoadTimeout);
+          removeIntroWindow();
+        });
+      });
+      document.body.classList.add('vi-video-active');
+    });
+  } else {
+    sessionStorage.setItem("videoPlayed", true);
+  }
+}
+
+function removeIntroWindow() {
+  introWindow.classList.add("fade-out");
+  sessionStorage.setItem("videoPlayed", true);
+  document.body.classList.remove('vi-video-active');
+  justBlack.style.display = "none";
+  videoEnded = true;
+}
+
+function hideSkipButton() {
+  skipButton.classList.add('hidden');
+}
+
+function showSkipButton() {
+  skipButton.classList.remove("hidden");
+}
+
+function skipVideoIntro() {
+  animationVideo.forEach(vid => {
+    vid.pause();
+    vid.currentTime = 0;
+  });
+  if (enterSound) {
+    enterSound.pause();
+    enterSound.currentTime = 0;
+  }
+  removeIntroWindow();
+  sessionStorage.setItem("videoPlayed", true);
+}
+
+setTimeout(() => {
+  preloadVideos();
+  initializeVideoIntro();
+}, 0);
+
+animationVideoContainer.addEventListener("click", () => {
+  if (checkConnectionSpeed() || videoEnded) return;
+  if (!videosLoaded) return;
+  animationVideo.forEach((vid => {
+    vid.play();
+    hideSkipButton();
+  }));
+  enterSound.volume = volumeIntro / 100;
+  enterSound.play();
+});
+
+document.querySelectorAll('.vid').forEach(video => {
+  video.addEventListener('ended', () => {
+    introWindow.classList.add('fade-out');
+    justBlack.style.display = "none";
+    videoEnded = true;
+    setTimeout(() => {
+      introWindow.style.display = 'none';
+      sessionStorage.setItem('videoPlayed', true);
+    }, 1000);
+  });
+  video.addEventListener('error', () => {
+    showSkipButton();
+  });
+});
+</script>
+
+{% else %}
+  <!-- In order for the video intro to work you need to add at least the desktop intro video -->
+{% endif %}

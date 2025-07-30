@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify Video Intro Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('abstract-luxury-gradient-blue-background-smooth-dark-blue-with-black-vignette-studio-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            overflow: auto;
+        }
+        .header {
+            margin-top: 20vh;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s ease, margin-top 0.5s ease, background 0.5s ease, backdrop-filter 0.5s ease, border 0.5s ease, box-shadow 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .header:hover {
+            transform: scale(1.05);
+        }
+        .header.clicked {
+            margin-top: 20px;
+            transform: none;
+            background: rgba(255, 255, 255, 0);
+            backdrop-filter: blur(0px);
+            border: 1px solid rgba(255, 255, 255, 0);
+            box-shadow: none;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -100%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.05) 30%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.05) 70%, transparent 100%);
+            transform: rotate(45deg);
+            transition: left 0.7s ease, opacity 0.5s ease;
+            filter: blur(5px);
+        }
+        .header:hover::before {
+            left: 100%;
+        }
+        .header.clicked::before {
+            opacity: 0;
+        }
+        .logo {
+            width: 200px;
+            height: auto;
+        }
+        .title {
+            font-family: 'Inter', sans-serif;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        .guide {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .guide.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        .start-button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .start-button:hover {
+            transform: scale(1.05);
+        }
+        .step {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            text-align: left;
+            animation: fadeIn 0.5s ease;
+        }
+        .step.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        p, li {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            position: relative;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .code-block pre {
+            display: none;
+        }
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        .copy-btn img {
+            width: 30px;
+            height: auto;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        .progress-bar {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: white;
+            transition: width 0.3s ease;
+        }
+        .step img[src*="Images/"] {
+            transition: width 0.3s ease, transform 0.3s ease;
+        }
+        .step img[src*="Images/"]:hover {
+            width: 100% !important;
+            transform: scale(1.2);
+            z-index: 10;
+        }
+        .step img[src="Images/Customize Settings.png"]:hover {
+            width: 20% !important;
+            transform: scale(1.1);
+        }
+        .settings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .settings-table th,
+        .settings-table td {
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: left;
+            font-size: 18px;
+        }
+
+        .settings-table th {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" onclick="startGuide()">
+        <img src="Shopify_logo_2018.svg" alt="Shopify Logo" class="logo">
+        <p class="title">VIDEO-INTRO-GUIDE</p>
+    </div>
+    <div class="guide" id="guide">
+        <div id="step0" class="step active">
+            <h2>🎬 Introduction</h2>
+            <p>Make your store’s first impression <strong>memorable and immersive</strong> with a custom <strong>video intro screen</strong>. This guide walks you through adding a branding-focused animation that plays before your store loads.</p>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="nextStep(1)">Next Step</button>
+            </div>
+        </div>
+        <div id="step1" class="step">
+            <h2>🛠 Prerequisites</h2>
+            <ul>
+                <li>Shopify Admin access</li>
+                <li>A short <strong>MP4 video</strong> (desktop & mobile)</li>
+                <li>(Optional) <strong>MP3 audio</strong></li>
+                <li>Skip button text (optional)</li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevStep(0)">Previous</button>
+                <button class="nav-btn" onclick="nextStep(2)">Next Step</button>
+            </div>
+        </div>
+        <div id="step2" class="step">
+            <h2>📁 Step 1: Open Shopify Code Editor</h2>
+            <ol>
+                <li>Visit <code>https://admin.shopify.com/store/your-store-handle</code></li>
+                <li>Go to <strong>Online Store > Themes</strong></li>
+                <li>Click the <strong>3-dot menu > Edit code</strong></li>
+            </ol>
+            <p>📸 (Image for code editor access)</p>
+            <img src="Images/Open Shopify Code Editor.png" alt="Open Shopify Code Editor" style="width: 100%; border-radius: 8px; margin: 10px 0;">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevStep(1)">Previous</button>
+                <button class="nav-btn" onclick="nextStep(3)">Next Step</button>
+            </div>
+        </div>
+        <div id="step3" class="step">
+            <h2>📂 Step 2: Add Snippet – `video-intro.liquid`</h2>
+            <ol>
+                <li>Scroll to <strong>Snippets</strong></li>
+                <li>Click <strong>Add new snippet</strong></li>
+                <li>Name it `video-intro`</li>
+                <li>Paste the code below:</li>
+            </ol>
+            <div class="code-block">
+                <pre><code>&lt;!-- Shopify video intro code --&gt;</code></pre>
+                <button class="copy-btn" onclick="copyToClipboard(this)">
+                    <img src="Shopify_logo_2018.svg" alt="Shopify Icon"> Copy video-intro.liquid
+                </button>
+            </div>
+            <p>📸 (Image for pasting snippet)</p>
+            <img src="Images/Add Snippet – `video-intro.liquid` step 2.png" alt="Add Snippet – video-intro.liquid" style="width: 100%; border-radius: 8px; margin: 10px 0;">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevStep(2)">Previous</button>
+                <button class="nav-btn" onclick="nextStep(4)">Next Step</button>
+            </div>
+        </div>
+        <div id="step4" class="step">
+            <h2>⚙️ Step 3: Update `settings_schema.json`</h2>
+            <p>Paste the following block *after the `theme_support_url`*:</p>
+            <div class="code-block">
+                <pre><code>{
+                    "name": "Video intro",
+                    "settings": [
+                        {
+                            "type": "url",
+                            "id": "intro_audio_file",
+                            "label": "Background Audio"
+                        },
+                        {
+                            "type": "url",
+                            "id": "intro_desktop_video",
+                            "label": "Desktop Video"
+                        },
+                        {
+                            "type": "url",
+                            "id": "intro_mobile_video",
+                            "label": "Mobile Video"
+                        },
+                        {
+                            "type": "range",
+                            "id": "volume_intro",
+                            "min": 0,
+                            "max": 100,
+                            "step": 1,
+                            "unit": "%",
+                            "label": "Audio Volume",
+                            "default": 20
+                        },
+                        {
+                            "type": "header",
+                            "content": "Video Intro Settings"
+                        },
+                        {
+                            "type": "text",
+                            "id": "intro_skip",
+                            "label": "Skip Button Text",
+                            "default": "Skip Intro",
+                            "info": "Leave blank to hide the skip button"
+                        },
+                        {
+                            "type": "color",
+                            "id": "skip_color",
+                            "label": "Skip Button Color",
+                            "default": "#ffffff",
+                            "info": "Color for the skip button text and border"
+                        }
+                    ]
+                
+}</code></pre>
+                <button class="copy-btn" onclick="copyToClipboard(this)">
+                    <img src="Shopify_logo_2018.svg" alt="Shopify Icon"> Copy settings_schema.json
+                </button>
+            </div>
+            <p>📸 (Image for settings_schema.json)</p>
+            <img src="Images/Update `settings_schema.json`.png" alt="Update settings_schema.json" style="width: 100%; border-radius: 8px; margin: 10px 0;">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevStep(3)">Previous</button>
+                <button class="nav-btn" onclick="nextStep(5)">Next Step</button>
+            </div>
+        </div>
+        <div id="step5" class="step">
+            <h2>🧩 Step 4: Embed Snippet in `theme.liquid`</h2>
+            <p>Find this line:</p>
+            <pre><code>&lt;link rel="canonical" href="{{ canonical_url }}"&gt;</code></pre>
+            <p>Paste this line <strong>below it</strong>:</p>
+            <div class="code-block">
+                <pre><code>{% render 'video-intro' %}</code></pre>
+                <button class="copy-btn" onclick="copyToClipboard(this)">
+                    <img src="Shopify_logo_2018.svg" alt="Shopify Icon"> Copy theme.liquid snippet
+                </button>
+            </div>
+            <p>📸 (Image for theme.liquid)</p>
+            <img src="Images/Embed Snippet in `theme.liquid`.png" alt="Embed Snippet in theme.liquid" style="width: 100%; border-radius: 8px; margin: 10px 0;">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevStep(4)">Previous</button>
+                <button class="nav-btn" onclick="nextStep(6)">Next Step</button>
+            </div>
+        </div>
+        <div id="step6" class="step">
+            <h2>🎨 Step 5: Customize Settings</h2>
+            <p>Available in Theme Editor:</p>
+            <table class="settings-table">
+                <tr><th>Setting</th><th>Description</th></tr>
+                <tr><td>Background Audio</td><td>Upload .mp3</td></tr>
+                <tr><td>Desktop Video</td><td>Upload .mp4 for desktop</td></tr>
+                <tr><td>Mobile Video</td><td>Upload .mp4 for mobile</td></tr>
+                <tr><td>Audio Volume</td><td>Adjust from 0–100%</td></tr>
+                <tr><td>Skip Button Text</td><td>Customize or hide</td></tr>
+                <tr><td>Skip Button Color</td><td>Change text/border color</td></tr>
+            </table>
+            <img src="Images/Customize Settings.png" alt="Customize Settings" style="width: 10%; border-radius: 8px; margin: 10px auto; display: block;"&gt;
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevStep(5)">Previous</button>
+                <button class="nav-btn" onclick="nextStep(7)">Next Step</button>
+            </div>
+        </div>
+        <div id="step7" class="step">
+            <h2>🔍 Step 6: Preview and Test</h2>
+            <ol>
+                <li>Go to your Shopify store’s front page</li>
+                <li>You should now see a full-screen branded video intro</li>
+                <li>Skip button will appear (if enabled)</li>
+                <li>Audio plays (if configured)</li>
+            </ol>
+            <p>🎉 Congrats! You now have an immersive Shopify intro experience</p>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevStep(6)">Previous</button>
+                <button class="nav-btn" onclick="nextStep(8)">Next</button>
+            </div>
+        </div>
+        <div id="step8" class="step">
+            <h2>🤝 Support</h2>
+            <p>Need help or want a custom version? Reach out anytime.<br>Created with ❤️ by [Your Company Name]<br>Powered by immersive web experiences</p>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevStep(7)">Previous</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const steps = document.querySelectorAll('.step');
+        let currentStep = -1;
+
+        function startGuide() {
+            const header = document.querySelector('.header');
+            const guide = document.getElementById('guide');
+            header.classList.add('clicked');
+            setTimeout(() => {
+                guide.classList.add('active');
+                // Optionally hide start button if needed, but it's now the header
+            }, 500); // Match animation duration
+            showStep(0); // Show first step
+        }
+
+        function showStep(index) {
+            steps.forEach((step, i) => {
+                step.classList.toggle('active', i === index);
+            });
+            currentStep = index;
+        }
+
+        function nextStep(index) {
+            showStep(index);
+        }
+
+        function prevStep(index) {
+            showStep(index);
+        }
+
+        function copyToClipboard(btn) {
+            const code = btn.previousElementSibling.textContent;
+            navigator.clipboard.writeText(code);
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        }
+    </script>
+</body>
+</html> 
