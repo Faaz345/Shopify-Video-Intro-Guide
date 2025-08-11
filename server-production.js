@@ -53,6 +53,27 @@ app.use((req, res, next) => {
     next();
 });
 
+// Validate required environment variables
+if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+    console.error('❌ CRITICAL ERROR: Razorpay credentials are missing!');
+    console.error('Please ensure the following environment variables are set:');
+    console.error('  - RAZORPAY_KEY_ID');
+    console.error('  - RAZORPAY_KEY_SECRET');
+    console.error('Current values:');
+    console.error('  - RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID ? 'Set (hidden)' : 'NOT SET');
+    console.error('  - RAZORPAY_KEY_SECRET:', process.env.RAZORPAY_KEY_SECRET ? 'Set (hidden)' : 'NOT SET');
+    
+    // Use dummy values in development to prevent crash
+    if (process.env.NODE_ENV !== 'production') {
+        console.warn('⚠️  Using dummy Razorpay credentials for development');
+        process.env.RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_dummy';
+        process.env.RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'dummy_secret';
+    } else {
+        console.error('🛑 Cannot start production server without Razorpay credentials!');
+        process.exit(1);
+    }
+}
+
 // Razorpay configuration
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -302,8 +323,56 @@ async function sendAccessEmail(email, details) {
 app.get('/health', (req, res) => {
     res.json({ 
         status: 'ok',
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        port: PORT,
+        timestamp: new Date().toISOString()
     });
+});
+
+// Environment status check (for debugging)
+app.get('/api/env-status', (req, res) => {
+    const envStatus = {
+        status: 'Environment Variables Status',
+        timestamp: new Date().toISOString(),
+        configuration: {
+            NODE_ENV: process.env.NODE_ENV || 'NOT SET',
+            PORT: process.env.PORT || 'NOT SET (using default)',
+            BASE_URL: process.env.BASE_URL || 'NOT SET',
+            
+            // MongoDB
+            MONGODB_URI: process.env.MONGODB_URI ? '✅ Set' : '❌ NOT SET',
+            
+            // Razorpay
+            RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID ? '✅ Set' : '❌ NOT SET',
+            RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET ? '✅ Set' : '❌ NOT SET',
+            
+            // Email
+            GMAIL_USER: process.env.GMAIL_USER || 'NOT SET',
+            GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? '✅ Set' : '❌ NOT SET',
+            
+            // Security
+            GUIDE_JWT_SECRET: process.env.GUIDE_JWT_SECRET ? '✅ Set' : '⚠️ Using default',
+            SESSION_SECRET: process.env.SESSION_SECRET ? '✅ Set' : '⚠️ Using default',
+            
+            // Other
+            COURSE_PRICE: process.env.COURSE_PRICE || '599 (default)',
+            ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS || 'NOT SET'
+        },
+        criticalIssues: []
+    };
+    
+    // Check for critical issues
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+        envStatus.criticalIssues.push('⚠️ Razorpay credentials missing - payments will not work!');
+    }
+    if (!process.env.MONGODB_URI) {
+        envStatus.criticalIssues.push('⚠️ MongoDB URI not set - using local fallback');
+    }
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+        envStatus.criticalIssues.push('⚠️ Gmail credentials missing - emails will not be sent!');
+    }
+    
+    res.json(envStatus);
 });
 
 // Start server

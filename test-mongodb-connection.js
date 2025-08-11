@@ -10,7 +10,7 @@
 const mongoose = require('mongoose');
 
 // Replace this with your actual MongoDB connection string
-const MONGODB_URI = 'mongodb+srv://shopifyguide:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/shopify-guide?retryWrites=true&w=majority';
+const MONGODB_URI = 'mongodb+srv://shopifyguide:3pubXfd5ipefRdQU@cluster0.ufhfzix.mongodb.net/shopify-guide?retryWrites=true&w=majority&appName=Cluster0';
 
 // Test configuration
 const testConnection = async () => {
