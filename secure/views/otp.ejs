@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enter OTP</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
+    .card { max-width: 420px; margin: 0 auto; padding: 1.5rem; border: 1px solid #ddd; border-radius: 8px; }
+    label { display:block; margin-bottom: .5rem; font-weight: 600; }
+    input[type="text"]{ width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px; font-size:1rem; }
+    button{ margin-top:1rem; padding:.6rem 1rem; background:#111827; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+    .muted{ color:#6b7280; font-size:.9rem; margin-top:.5rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Verify your email</h2>
+    <p class="muted">We sent a one-time password to <strong><%= email %></strong>. Enter it below to access your content.</p>
+    <form method="POST" action="/otp/verify">
+      <input type="hidden" name="token" value="<%= token %>" />
+      <label for="otp">One-Time Password</label>
+      <input id="otp" name="otp" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" required minlength="6" maxlength="6" />
+      <button type="submit">Verify and Continue</button>
+    </form>
+  </div>
+</body>
+</html>
+

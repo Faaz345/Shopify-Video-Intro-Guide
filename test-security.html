@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security System Test - Shopify Video Intro Guide</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .header h1 {
+            color: #00f5ff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.2rem;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .test-section h3 {
+            color: #00ff88;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        .security-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .status-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #00f5ff;
+        }
+        .status-card.success {
+            border-left-color: #00ff88;
+        }
+        .status-card.warning {
+            border-left-color: #ff9800;
+        }
+        .status-card.error {
+            border-left-color: #ff6b6b;
+        }
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .test-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        .test-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .log-section {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .log-entry.success {
+            color: #00ff88;
+        }
+        .log-entry.error {
+            color: #ff6b6b;
+        }
+        .log-entry.warning {
+            color: #ff9800;
+        }
+        .demo-url {
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Security System Test</h1>
+            <p>Test the enhanced course access security features</p>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Security Status</h3>
+            <div class="security-status">
+                <div class="status-card" id="tokenStatus">
+                    <h4>Access Token</h4>
+                    <p id="tokenStatusText">Not validated</p>
+                </div>
+                <div class="status-card" id="sessionStatus">
+                    <h4>Session</h4>
+                    <p id="sessionStatusText">No session</p>
+                </div>
+                <div class="status-card" id="deviceStatus">
+                    <h4>Device Security</h4>
+                    <p id="deviceStatusText">Checking...</p>
+                </div>
+                <div class="status-card" id="activityStatus">
+                    <h4>Activity Monitor</h4>
+                    <p id="activityStatusText">Inactive</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Security Tests</h3>
+            <p>Test various security scenarios to see how the system responds:</p>
+            
+            <div class="test-buttons">
+                <button class="test-btn" onclick="testValidToken()">Test Valid Token</button>
+                <button class="test-btn" onclick="testInvalidToken()">Test Invalid Token</button>
+                <button class="test-btn" onclick="testExpiredToken()">Test Expired Token</button>
+                <button class="test-btn" onclick="testDeviceSwitch()">Simulate Device Switch</button>
+                <button class="test-btn" onclick="testSessionTimeout()">Test Session Timeout</button>
+                <button class="test-btn" onclick="testSuspiciousActivity()">Trigger Security Alert</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🌐 Demo URLs</h3>
+            <p>Test these URLs to see different security scenarios:</p>
+            
+            <div class="demo-url">
+                <strong>Valid Access:</strong><br>
+                https://shopify-intro-guide.vercel.app/?token=demo_valid_token_123&email=test@example.com
+            </div>
+            
+            <div class="demo-url">
+                <strong>Invalid Token:</strong><br>
+                https://shopify-intro-guide.vercel.app/?token=invalid_token&email=test@example.com
+            </div>
+            
+            <div class="demo-url">
+                <strong>Missing Parameters:</strong><br>
+                https://shopify-intro-guide.vercel.app/
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 Security Log</h3>
+            <div class="log-section" id="securityLog">
+                <div class="log-entry">System initialized - Waiting for security tests...</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>⚙️ Configuration</h3>
+            <p>Current security settings:</p>
+            <ul>
+                <li><strong>Max Access Attempts:</strong> 50</li>
+                <li><strong>Max Devices:</strong> 2</li>
+                <li><strong>Max IP Addresses:</strong> 3</li>
+                <li><strong>Session Timeout:</strong> 5 minutes</li>
+                <li><strong>Access Check Interval:</strong> 5 minutes</li>
+                <li><strong>Session Check Interval:</strong> 30 seconds</li>
+                <li><strong>Heartbeat Interval:</strong> 1 minute</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Mock security system for testing
+        class SecurityTester {
+            constructor() {
+                this.accessValidated = false;
+                this.sessionId = null;
+                this.deviceFingerprint = this.generateMockFingerprint();
+                this.activityCount = 0;
+                this.startTime = Date.now();
+                
+                this.initializeSystem();
+            }
+            
+            generateMockFingerprint() {
+                return btoa(navigator.userAgent + screen.width + screen.height).substring(0, 16);
+            }
+            
+            initializeSystem() {
+                this.updateStatus('deviceStatus', 'success', `Fingerprint: ${this.deviceFingerprint}`);
+                this.logEvent('System initialized with device fingerprint', 'success');
+                
+                // Start activity monitoring
+                this.startActivityMonitoring();
+            }
+            
+            startActivityMonitoring() {
+                ['mousedown', 'keydown', 'scroll'].forEach(event => {
+                    document.addEventListener(event, () => {
+                        this.activityCount++;
+                        this.updateStatus('activityStatus', 'success', `Active (${this.activityCount} events)`);
+                    });
+                });
+            }
+            
+            updateStatus(cardId, type, text) {
+                const card = document.getElementById(cardId);
+                const textElement = document.getElementById(cardId.replace('Status', 'StatusText'));
+                
+                card.className = `status-card ${type}`;
+                textElement.textContent = text;
+            }
+            
+            logEvent(message, type = 'info') {
+                const logSection = document.getElementById('securityLog');
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry ${type}`;
+                logEntry.innerHTML = `[${timestamp}] ${message}`;
+                logSection.appendChild(logEntry);
+                logSection.scrollTop = logSection.scrollHeight;
+            }
+            
+            async testValidToken() {
+                this.logEvent('Testing valid token validation...', 'info');
+                
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                this.accessValidated = true;
+                this.sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+                
+                this.updateStatus('tokenStatus', 'success', 'Valid - Access granted');
+                this.updateStatus('sessionStatus', 'success', `Active: ${this.sessionId}`);
+                
+                this.logEvent('✅ Token validation successful - Access granted', 'success');
+                this.logEvent(`Session created: ${this.sessionId}`, 'success');
+            }
+            
+            async testInvalidToken() {
+                this.logEvent('Testing invalid token...', 'info');
+                
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                this.accessValidated = false;
+                this.sessionId = null;
+                
+                this.updateStatus('tokenStatus', 'error', 'Invalid - Access denied');
+                this.updateStatus('sessionStatus', 'error', 'No session');
+                
+                this.logEvent('❌ Token validation failed - Invalid token', 'error');
+                this.logEvent('Access denied - User would see access denied screen', 'error');
+            }
+            
+            async testExpiredToken() {
+                this.logEvent('Testing expired token scenario...', 'info');
+                
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                
+                this.updateStatus('tokenStatus', 'warning', 'Expired - Access revoked');
+                this.updateStatus('sessionStatus', 'error', 'Session terminated');
+                
+                this.logEvent('⚠️ Token has expired - Access revoked', 'warning');
+                this.logEvent('Session terminated due to token expiry', 'warning');
+            }
+            
+            async testDeviceSwitch() {
+                this.logEvent('Simulating device switch detection...', 'info');
+                
+                await new Promise(resolve => setTimeout(resolve, 900));
+                
+                const newFingerprint = 'new_device_' + Math.random().toString(36).substr(2, 8);
+                
+                this.updateStatus('deviceStatus', 'warning', `Multiple devices detected`);
+                
+                this.logEvent('⚠️ Multiple device access detected', 'warning');
+                this.logEvent(`Original: ${this.deviceFingerprint}`, 'warning');
+                this.logEvent(`New: ${newFingerprint}`, 'warning');
+                this.logEvent('Triggering security review...', 'warning');
+            }
+            
+            async testSessionTimeout() {
+                this.logEvent('Testing session timeout...', 'info');
+                
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                this.updateStatus('sessionStatus', 'warning', 'Session timeout detected');
+                
+                this.logEvent('⚠️ Session timeout detected', 'warning');
+                this.logEvent('Requesting session re-validation...', 'warning');
+                
+                // Simulate re-validation
+                setTimeout(() => {
+                    this.logEvent('Session re-validation required', 'warning');
+                    this.updateStatus('sessionStatus', 'error', 'Re-authentication needed');
+                }, 2000);
+            }
+            
+            async testSuspiciousActivity() {
+                this.logEvent('Triggering suspicious activity detection...', 'info');
+                
+                await new Promise(resolve => setTimeout(resolve, 600));
+                
+                // Simulate multiple rapid requests
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.logEvent(`Rapid request #${i + 1} detected`, 'warning');
+                    }, i * 200);
+                }
+                
+                setTimeout(() => {
+                    this.updateStatus('tokenStatus', 'error', 'Suspended - Suspicious activity');
+                    this.updateStatus('sessionStatus', 'error', 'Session blocked');
+                    this.logEvent('🚫 SECURITY ALERT: Token suspended due to suspicious activity', 'error');
+                    this.logEvent('Manual review required - Contact support', 'error');
+                }, 1500);
+            }
+        }
+        
+        // Initialize security tester
+        const securityTester = new SecurityTester();
+        
+        // Global functions for test buttons
+        function testValidToken() {
+            securityTester.testValidToken();
+        }
+        
+        function testInvalidToken() {
+            securityTester.testInvalidToken();
+        }
+        
+        function testExpiredToken() {
+            securityTester.testExpiredToken();
+        }
+        
+        function testDeviceSwitch() {
+            securityTester.testDeviceSwitch();
+        }
+        
+        function testSessionTimeout() {
+            securityTester.testSessionTimeout();
+        }
+        
+        function testSuspiciousActivity() {
+            securityTester.testSuspiciousActivity();
+        }
+        
+        // Auto-update system stats
+        setInterval(() => {
+            const uptime = Math.floor((Date.now() - securityTester.startTime) / 1000);
+            securityTester.logEvent(`System uptime: ${uptime}s, Activity: ${securityTester.activityCount} events`, 'info');
+        }, 30000);
+        
+    </script>
+</body>
+</html>

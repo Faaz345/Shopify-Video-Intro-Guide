@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopifyMastery Pro - Your Premium Course</title>
+    <meta name="description" content="Access your premium Shopify dropshipping course materials. Exclusive content for verified members only.">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .premium-badge {
+            display: inline-block;
+            background: #f39c12;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .content-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .content-card h2 {
+            color: #f39c12;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .content-card p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+        
+        .content-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .content-card li {
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .content-card li:before {
+            content: "✓ ";
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .video-placeholder {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .video-placeholder h3 {
+            color: #f39c12;
+            margin-bottom: 1rem;
+        }
+        
+        .security-info {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .security-info h3 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+        
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .user-info h3 {
+            color: #27ae60;
+            margin-bottom: 1rem;
+        }
+        
+        .access-warning {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            max-width: 300px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div>🔒 Verifying access permissions...</div>
+    </div>
+    
+    <!-- Access warning -->
+    <div id="access-warning" class="access-warning">
+        <strong>⚠️ Security Alert:</strong>
+        <div id="warning-message"></div>
+    </div>
+    
+    <!-- Main content (initially hidden) -->
+    <div id="main-content" class="container hidden">
+        <div class="header">
+            <div class="premium-badge">🔒 PREMIUM CONTENT</div>
+            <h1>Exclusive Training Materials</h1>
+            <p>Welcome to your premium content! This page is protected and only accessible to verified users.</p>
+        </div>
+        
+        <div id="user-info" class="user-info">
+            <h3>👤 Your Access Information</h3>
+            <div id="user-details">Loading user details...</div>
+        </div>
+        
+        <div class="security-info">
+            <h3>🛡️ Security Features Active</h3>
+            <p><strong>Device Protection:</strong> This content is locked to your device and cannot be shared.</p>
+            <p><strong>Session Monitoring:</strong> Your access is being monitored for security purposes.</p>
+            <p><strong>Content Protection:</strong> Right-click and developer tools are disabled to protect intellectual property.</p>
+        </div>
+        
+        <div class="content-grid">
+            <div class="content-card">
+                <h2>📚 Course Modules</h2>
+                <ul>
+                    <li>Module 1: Foundation Concepts</li>
+                    <li>Module 2: Advanced Techniques</li>
+                    <li>Module 3: Expert Strategies</li>
+                    <li>Module 4: Case Studies</li>
+                    <li>Module 5: Final Project</li>
+                </ul>
+                <p>Complete access to all premium course materials, including video lessons, PDF guides, and interactive exercises.</p>
+            </div>
+            
+            <div class="content-card">
+                <h2>🎥 Video Library</h2>
+                <div class="video-placeholder">
+                    <h3>🎬 Premium Video Content</h3>
+                    <p>Over 50 hours of exclusive video content</p>
+                    <p><small>Videos are protected and cannot be downloaded</small></p>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h2>📖 Exclusive Resources</h2>
+                <ul>
+                    <li>Industry Reports & Analysis</li>
+                    <li>Template Downloads</li>
+                    <li>Checklists & Worksheets</li>
+                    <li>Bonus Materials</li>
+                    <li>Community Access</li>
+                </ul>
+                <p>Premium resources worth over $500, exclusively for paid members.</p>
+            </div>
+            
+            <div class="content-card">
+                <h2>💬 Support & Community</h2>
+                <ul>
+                    <li>Priority Customer Support</li>
+                    <li>Private Community Forum</li>
+                    <li>Monthly Live Q&A Sessions</li>
+                    <li>Expert Mentorship</li>
+                    <li>Networking Opportunities</li>
+                </ul>
+                <p>Connect with other premium members and get expert guidance.</p>
+            </div>
+        </div>
+        
+        <div class="video-placeholder">
+            <h3>🔐 This is what protected content looks like!</h3>
+            <p>In a real implementation, this would contain your premium videos, courses, or materials.</p>
+            <p><strong>Security Features:</strong></p>
+            <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
+                <li>✅ Device fingerprint verified</li>
+                <li>✅ Payment status confirmed</li>
+                <li>✅ Access token validated</li>
+                <li>✅ Content protection active</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        let accessGranted = false;
+
+        // Check access on page load
+        async function checkAccess() {
+            try {
+                // Get access token from URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const accessToken = urlParams.get('access');
+                
+                if (!accessToken) {
+                    redirectToPayment('No access token provided');
+                    return;
+                }
+                
+                // Get JWT token from localStorage
+                const jwtToken = localStorage.getItem('access_token');
+                if (!jwtToken) {
+                    redirectToPayment('Authentication required');
+                    return;
+                }
+                
+                // Validate access with backend
+                const response = await fetch(`${API_BASE}/api/validate-access`, {
+                    headers: {
+                        'Authorization': `Bearer ${jwtToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.valid) {
+                    // Access granted
+                    accessGranted = true;
+                    showContent(data.user);
+                } else {
+                    redirectToPayment('Access validation failed');
+                }
+                
+            } catch (error) {
+                console.error('Access check error:', error);
+                redirectToPayment('Access verification failed');
+            }
+        }
+
+        function redirectToPayment(reason) {
+            showAccessWarning(reason);
+            setTimeout(() => {
+                window.location.href = '/payment.html';
+            }, 3000);
+        }
+
+        function showAccessWarning(message) {
+            document.getElementById('warning-message').textContent = message;
+            document.getElementById('access-warning').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('access-warning').style.display = 'none';
+            }, 3000);
+        }
+
+        function showContent(user) {
+            // Hide loading overlay
+            document.getElementById('loading-overlay').classList.add('hidden');
+            
+            // Show main content
+            document.getElementById('main-content').classList.remove('hidden');
+            
+            // Display user information
+            document.getElementById('user-details').innerHTML = `
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Access Count:</strong> ${user.accessCount} times</p>
+                <p><strong>Last Access:</strong> ${new Date(user.lastAccess).toLocaleString()}</p>
+                <p><strong>Status:</strong> <span style="color: #27ae60;">✅ Premium Member</span></p>
+            `;
+            
+            // Apply content protection
+            applyContentProtection();
+        }
+
+        function applyContentProtection() {
+            // Disable right-click
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showAccessWarning('Content is protected - right-click disabled');
+                return false;
+            });
+            
+            // Disable key combinations
+            document.addEventListener('keydown', function(e) {
+                // F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S, etc.
+                if (e.keyCode === 123 || 
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+                    (e.ctrlKey && e.keyCode === 85) ||
+                    (e.ctrlKey && e.keyCode === 83)) {
+                    e.preventDefault();
+                    showAccessWarning('Developer tools disabled for content protection');
+                    return false;
+                }
+            });
+            
+            // Disable text selection
+            document.body.style.userSelect = 'none';
+            document.body.style.webkitUserSelect = 'none';
+            document.body.style.mozUserSelect = 'none';
+            document.body.style.msUserSelect = 'none';
+            
+            // Disable drag
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Basic dev tools detection
+            let devtools = {open: false};
+            const threshold = 160;
+            
+            setInterval(() => {
+                if (window.outerHeight - window.innerHeight > threshold || 
+                    window.outerWidth - window.innerWidth > threshold) {
+                    if (!devtools.open) {
+                        devtools.open = true;
+                        showAccessWarning('Developer tools detected! Content may be restricted.');
+                        document.body.style.filter = 'blur(3px)';
+                        setTimeout(() => {
+                            document.body.style.filter = 'none';
+                        }, 2000);
+                    }
+                } else {
+                    devtools.open = false;
+                }
+            }, 1000);
+            
+            console.clear();
+            console.log('%c🔒 Content Protected', 'color: red; font-size: 20px; font-weight: bold;');
+            console.log('%cThis content is protected by device fingerprinting and access controls.', 'color: orange; font-size: 14px;');
+            console.log('%cUnauthorized access attempts are logged and monitored.', 'color: orange; font-size: 14px;');
+        }
+
+        // Auto-logout on inactivity (30 minutes)
+        let inactivityTimer;
+        const INACTIVITY_TIMEOUT = 30 * 60 * 1000;
+        
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                localStorage.removeItem('access_token');
+                alert('Session expired due to inactivity. Please login again.');
+                window.location.href = '/payment.html';
+            }, INACTIVITY_TIMEOUT);
+        }
+        
+        // Track user activity
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+            document.addEventListener(event, resetInactivityTimer, true);
+        });
+        
+        // Initialize access check
+        checkAccess();
+        resetInactivityTimer();
+    </script>
+</body>
+</html>

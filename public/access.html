@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Access - Shopify Video Intro Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .step.completed {
+            background: #2196F3;
+            border-color: #2196F3;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .otp-input {
+            text-align: center;
+            font-size: 2rem;
+            letter-spacing: 8px;
+            font-weight: bold;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .alert-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            color: #ffcccb;
+        }
+
+        .alert-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #c8e6c9;
+        }
+
+        .alert-info {
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid rgba(33, 150, 243, 0.5);
+            color: #bbdefb;
+        }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .masked-email {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .security-info {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .otp-input {
+                font-size: 1.5rem;
+                letter-spacing: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🔐</div>
+            <h1>Secure Access</h1>
+            <p class="subtitle">Shopify Video Intro Guide</p>
+        </div>
+
+        <div class="step-indicator">
+            <div class="step active" id="step1">1</div>
+            <div class="step" id="step2">2</div>
+            <div class="step" id="step3">✓</div>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- Step 1: Token Verification -->
+        <div id="tokenStep" class="form-container">
+            <div class="info-box">
+                <p><strong>Step 1:</strong> Verifying your secure access token...</p>
+                <p style="margin-top: 10px; font-size: 0.9rem;">Please wait while we validate your purchase.</p>
+            </div>
+        </div>
+
+        <!-- Step 2: OTP Verification -->
+        <div id="otpStep" class="form-container hidden">
+            <div class="info-box">
+                <p><strong>Step 2:</strong> Enter verification code</p>
+                <p style="margin-top: 10px;">We've sent a 6-digit code to:</p>
+                <p class="masked-email" id="maskedEmail"></p>
+            </div>
+
+            <form id="otpForm">
+                <div class="form-group">
+                    <label for="otpCode">Enter 6-digit verification code:</label>
+                    <input type="text" 
+                           id="otpCode" 
+                           maxlength="6" 
+                           pattern="[0-9]{6}" 
+                           class="otp-input" 
+                           placeholder="000000"
+                           autocomplete="one-time-code">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="verifyOtpBtn">
+                    Verify Code & Access Content
+                </button>
+            </form>
+
+            <div class="security-info">
+                <p>🔒 This code expires in 10 minutes</p>
+                <p>📧 Check your email if you don't see the code</p>
+            </div>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div id="successStep" class="form-container hidden">
+            <div class="info-box">
+                <div style="font-size: 3rem; margin-bottom: 20px;">🎉</div>
+                <h2 style="color: #4CAF50; margin-bottom: 15px;">Access Granted!</h2>
+                <p>Redirecting to your secure content...</p>
+            </div>
+        </div>
+
+        <div class="security-info">
+            <p>🛡️ Your session is protected with advanced security measures</p>
+            <p>📱 Access is limited to this device and browser</p>
+        </div>
+    </div>
+
+    <script>
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        let currentStep = 1;
+        let otpVerificationInProgress = false;
+
+        // DOM elements
+        const alertContainer = document.getElementById('alertContainer');
+        const tokenStep = document.getElementById('tokenStep');
+        const otpStep = document.getElementById('otpStep');
+        const successStep = document.getElementById('successStep');
+        const maskedEmail = document.getElementById('maskedEmail');
+        const otpForm = document.getElementById('otpForm');
+        const otpCode = document.getElementById('otpCode');
+        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+
+        // Step indicators
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+
+        function showAlert(message, type = 'error') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+
+            // Auto-remove after 5 seconds for success/info alerts
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 5000);
+            }
+        }
+
+        function updateStep(step) {
+            currentStep = step;
+            
+            // Update step indicators
+            [step1, step2, step3].forEach((el, index) => {
+                el.classList.remove('active', 'completed');
+                if (index + 1 < step) {
+                    el.classList.add('completed');
+                } else if (index + 1 === step) {
+                    el.classList.add('active');
+                }
+            });
+
+            // Show/hide step content
+            tokenStep.classList.add('hidden');
+            otpStep.classList.add('hidden');
+            successStep.classList.add('hidden');
+
+            switch (step) {
+                case 1:
+                    tokenStep.classList.remove('hidden');
+                    break;
+                case 2:
+                    otpStep.classList.remove('hidden');
+                    break;
+                case 3:
+                    successStep.classList.remove('hidden');
+                    break;
+            }
+        }
+
+        function setLoading(button, loading) {
+            if (loading) {
+                button.disabled = true;
+                const originalText = button.textContent;
+                button.dataset.originalText = originalText;
+                button.innerHTML = '<span class="loading"></span>Processing...';
+            } else {
+                button.disabled = false;
+                button.textContent = button.dataset.originalText || button.textContent;
+            }
+        }
+
+        // Auto-verify token on page load
+        async function verifyToken() {
+            if (!token) {
+                showAlert('No access token provided. Please check your email for the correct link.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/secure-access/${token}`);
+                const data = await response.json();
+
+                if (data.success && data.requiresOTP) {
+                    maskedEmail.textContent = data.email;
+                    showAlert('Verification code sent to your email!', 'success');
+                    updateStep(2);
+                    otpCode.focus();
+                } else {
+                    showAlert(data.error || 'Token verification failed', 'error');
+                }
+            } catch (error) {
+                console.error('Token verification error:', error);
+                showAlert('Network error. Please check your connection and try again.', 'error');
+            }
+        }
+
+        // OTP form submission
+        otpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (otpVerificationInProgress) return;
+
+            const otp = otpCode.value.trim();
+            
+            if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+                showAlert('Please enter a valid 6-digit verification code', 'error');
+                otpCode.focus();
+                return;
+            }
+
+            otpVerificationInProgress = true;
+            setLoading(verifyOtpBtn, true);
+
+            try {
+                const response = await fetch(`/api/verify-otp/${token}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ otp })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('Code verified successfully! Accessing your content...', 'success');
+                    updateStep(3);
+                    
+                    // Redirect to secure content
+                    setTimeout(() => {
+                        window.location.href = data.redirectTo;
+                    }, 2000);
+                } else {
+                    showAlert(data.error || 'Verification failed', 'error');
+                    otpCode.value = '';
+                    otpCode.focus();
+                    
+                    if (data.action === 'contact_support') {
+                        setTimeout(() => {
+                            showAlert('Too many failed attempts. Please contact support at code.commerce999@gmail.com', 'error');
+                        }, 3000);
+                    }
+                }
+            } catch (error) {
+                console.error('OTP verification error:', error);
+                showAlert('Network error. Please try again.', 'error');
+            } finally {
+                otpVerificationInProgress = false;
+                setLoading(verifyOtpBtn, false);
+            }
+        });
+
+        // Auto-format OTP input
+        otpCode.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 6);
+            e.target.value = value;
+            
+            // Auto-submit when 6 digits entered
+            if (value.length === 6) {
+                setTimeout(() => {
+                    otpForm.dispatchEvent(new Event('submit'));
+                }, 100);
+            }
+        });
+
+        // Prevent paste of non-numeric content
+        otpCode.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const paste = (e.clipboardData || window.clipboardData).getData('text');
+            const numericOnly = paste.replace(/\D/g, '').substring(0, 6);
+            otpCode.value = numericOnly;
+            
+            if (numericOnly.length === 6) {
+                setTimeout(() => {
+                    otpForm.dispatchEvent(new Event('submit'));
+                }, 100);
+            }
+        });
+
+        // Security measures
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'a')) ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J'))) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Start verification process
+        document.addEventListener('DOMContentLoaded', () => {
+            verifyToken();
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Flow Test - Shopify Video Intro Guide</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #050505 0%, #0a0a0a 100%);
+            color: white;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            color: #00f5ff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .test-button {
+            background: linear-gradient(135deg, #00f5ff, #0066ff);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 245, 255, 0.3);
+        }
+        .status {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .success { color: #00ff88; }
+        .error { color: #ff4444; }
+        .warning { color: #ffaa00; }
+        .info { color: #00f5ff; }
+        input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            font-size: 16px;
+            width: 250px;
+            margin: 10px;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Payment Flow Test</h1>
+        <p style="text-align: center; color: #b0b0b0;">Testing the Shopify Video Intro Guide payment system</p>
+        
+        <div class="test-section">
+            <h3>📡 Server Connection Test</h3>
+            <button class="test-button" onclick="testServerConnection()">Test Server Status</button>
+            <div id="server-status" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🏠 Homepage Test</h3>
+            <button class="test-button" onclick="testHomepage()">Load Homepage</button>
+            <button class="test-button" onclick="window.open('http://localhost:3000', '_blank')">Open in New Tab</button>
+            <div id="homepage-status" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>💳 Order Creation Test</h3>
+            <button class="test-button" onclick="testOrderCreation()">Create Test Order</button>
+            <div id="order-status" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ Success Page Test</h3>
+            <button class="test-button" onclick="testSuccessPage()">Test Success Page</button>
+            <button class="test-button" onclick="window.open('http://localhost:3000/success.html', '_blank')">Open Success Page</button>
+            <div id="success-status" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔐 Payment Verification Test</h3>
+            <input type="email" id="test-email" placeholder="test@example.com" value="test@example.com">
+            <button class="test-button" onclick="testPaymentVerification()">Test Verification</button>
+            <div id="verify-status" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 Test Results Summary</h3>
+            <div id="summary" class="status"></div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = {
+            server: false,
+            homepage: false,
+            order: false,
+            success: false,
+            verification: false
+        };
+
+        async function testServerConnection() {
+            const status = document.getElementById('server-status');
+            status.innerHTML = '<span class="info">Testing server connection...</span>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/');
+                if (response.ok) {
+                    status.innerHTML = '<span class="success">✅ Server is running on localhost:3000</span>';
+                    testResults.server = true;
+                } else {
+                    status.innerHTML = `<span class="error">❌ Server responded with status: ${response.status}</span>`;
+                }
+            } catch (error) {
+                status.innerHTML = `<span class="error">❌ Cannot connect to server: ${error.message}</span>`;
+            }
+            updateSummary();
+        }
+
+        async function testHomepage() {
+            const status = document.getElementById('homepage-status');
+            status.innerHTML = '<span class="info">Loading homepage...</span>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/');
+                if (response.ok) {
+                    const text = await response.text();
+                    status.innerHTML = `<span class="success">✅ Homepage loaded successfully<br>Content length: ${text.length} characters<br>Contains video intro guide: ${text.includes('Shopify Video Intro Guide') ? 'Yes' : 'No'}</span>`;
+                    testResults.homepage = true;
+                } else {
+                    status.innerHTML = `<span class="error">❌ Failed to load homepage: ${response.status}</span>`;
+                }
+            } catch (error) {
+                status.innerHTML = `<span class="error">❌ Homepage test failed: ${error.message}</span>`;
+            }
+            updateSummary();
+        }
+
+        async function testOrderCreation() {
+            const status = document.getElementById('order-status');
+            status.innerHTML = '<span class="info">Testing order creation...</span>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/create-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    status.innerHTML = `<span class="success">✅ Order creation successful<br>Response: ${JSON.stringify(data, null, 2)}</span>`;
+                    testResults.order = true;
+                } else {
+                    status.innerHTML = `<span class="warning">⚠️ Order creation failed (expected with demo keys)<br>Error: ${JSON.stringify(data, null, 2)}<br><em>This is normal - replace Razorpay keys for real testing</em></span>`;
+                }
+            } catch (error) {
+                status.innerHTML = `<span class="error">❌ Order creation test failed: ${error.message}</span>`;
+            }
+            updateSummary();
+        }
+
+        async function testSuccessPage() {
+            const status = document.getElementById('success-status');
+            status.innerHTML = '<span class="info">Testing success page...</span>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/success.html');
+                if (response.ok) {
+                    const text = await response.text();
+                    status.innerHTML = `<span class="success">✅ Success page loaded successfully<br>Content length: ${text.length} characters<br>Contains payment confirmation: ${text.includes('Payment Successful') ? 'Yes' : 'No'}</span>`;
+                    testResults.success = true;
+                } else {
+                    status.innerHTML = `<span class="error">❌ Failed to load success page: ${response.status}</span>`;
+                }
+            } catch (error) {
+                status.innerHTML = `<span class="error">❌ Success page test failed: ${error.message}</span>`;
+            }
+            updateSummary();
+        }
+
+        async function testPaymentVerification() {
+            const status = document.getElementById('verify-status');
+            const email = document.getElementById('test-email').value;
+            status.innerHTML = '<span class="info">Testing payment verification...</span>';
+            
+            const mockPaymentData = {
+                razorpay_payment_id: 'pay_test123456789',
+                razorpay_order_id: 'order_test123456789',
+                razorpay_signature: 'mock_signature_for_testing',
+                customer_email: email
+            };
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(mockPaymentData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    status.innerHTML = `<span class="success">✅ Payment verification successful<br>Response: ${JSON.stringify(data, null, 2)}</span>`;
+                    testResults.verification = true;
+                } else {
+                    status.innerHTML = `<span class="warning">⚠️ Payment verification failed (expected with mock data)<br>Error: ${JSON.stringify(data, null, 2)}<br><em>This is normal - signature verification fails with mock data</em></span>`;
+                }
+            } catch (error) {
+                status.innerHTML = `<span class="error">❌ Payment verification test failed: ${error.message}</span>`;
+            }
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('summary');
+            const passedTests = Object.values(testResults).filter(result => result).length;
+            const totalTests = Object.keys(testResults).length;
+            
+            summary.innerHTML = `
+                <span class="info">Test Results: ${passedTests}/${totalTests} passed</span><br><br>
+                <span class="${testResults.server ? 'success' : 'error'}">Server Connection: ${testResults.server ? '✅ PASS' : '❌ FAIL'}</span><br>
+                <span class="${testResults.homepage ? 'success' : 'error'}">Homepage: ${testResults.homepage ? '✅ PASS' : '❌ FAIL'}</span><br>
+                <span class="warning">Order Creation: ⚠️ EXPECTED FAIL (demo keys)</span><br>
+                <span class="${testResults.success ? 'success' : 'error'}">Success Page: ${testResults.success ? '✅ PASS' : '❌ FAIL'}</span><br>
+                <span class="warning">Payment Verification: ⚠️ EXPECTED FAIL (mock data)</span><br><br>
+                
+                <strong>Next Steps:</strong><br>
+                1. Replace Razorpay keys in server-shopify.js<br>
+                2. Configure Gmail app password<br>
+                3. Test with real payment credentials
+            `;
+        }
+
+        // Auto-run server connection test on load
+        window.onload = () => {
+            testServerConnection();
+        };
+    </script>
+</body>
+</html>

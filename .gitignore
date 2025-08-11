@@ -6,11 +6,34 @@ node_modules/
 out/
 .vercel/
 
+<<<<<<< HEAD
 # Logs
+=======
+# IDE / OS
+.vs/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+site.*.log
+
+# Env and secrets
+.env*
+secure/.env
+
+# Build artifacts
+coverage/
+dist/
+
+# Misc
+>>>>>>> 5cdab0d (Secure Next.js guide with middleware (protected by sc_session))
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+<<<<<<< HEAD
 
 # Env
 .env*
@@ -18,3 +41,5 @@ pnpm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+=======
+>>>>>>> 5cdab0d (Secure Next.js guide with middleware (protected by sc_session))

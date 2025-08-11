@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Course Demo - Shopify Video Intro Guide</title>
+    
+    <!-- CRITICAL: This script MUST be loaded FIRST, before any other scripts -->
+    <script src="ultra-secure-guard.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .security-status {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .status-secure {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+        }
+        
+        .status-warning {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+            color: white;
+        }
+        
+        .course-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .content-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .content-card p {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .warning-box {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .warning-box h4 {
+            color: #e74c3c;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .info-box h4 {
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .test-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .test-btn.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .test-btn.warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+        
+        .test-btn.danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛡️ Ultra-Secure Course Demo</h1>
+        <p>Shopify Video Intro Guide - Single Tab Access Protection</p>
+    </div>
+    
+    <div class="container">
+        <div class="security-status">
+            <h2>🔐 Security Status</h2>
+            <div id="securityStatus" class="status-indicator status-warning">
+                <span>⏳</span> Initializing Security...
+            </div>
+            
+            <div id="sessionInfo" style="margin-top: 1rem; font-family: monospace; font-size: 0.9rem; color: #666;">
+                <!-- Session info will be populated here -->
+            </div>
+        </div>
+        
+        <div class="warning-box">
+            <h4>⚠️ Critical Security Notice</h4>
+            <p>This course demo uses <strong>ultra-aggressive</strong> security measures to prevent unauthorized sharing:</p>
+            <ul style="margin: 1rem 0; padding-left: 2rem;">
+                <li>✅ <strong>Single Tab Access</strong> - URL only works in one browser tab</li>
+                <li>✅ <strong>Device Locked</strong> - Access tied to specific browser/device fingerprint</li>
+                <li>✅ <strong>Real-time Validation</strong> - Continuous server-side session verification</li>
+                <li>✅ <strong>Anti-Sharing Protection</strong> - Blocks copied URLs, new windows, incognito mode</li>
+                <li>✅ <strong>Content Protection</strong> - Disables right-click, dev tools, printing, screenshots</li>
+            </ul>
+        </div>
+        
+        <div class="course-content">
+            <div class="content-card">
+                <h3>📚 Course Content</h3>
+                <p>Complete Liquid programming tutorial for adding cinematic video intros to Shopify stores.</p>
+                
+                <h4 style="margin-top: 1.5rem; color: #555;">Included Files:</h4>
+                <ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8;">
+                    <li>📄 <code>video-intro.liquid</code> - Complete snippet</li>
+                    <li>⚙️ <code>settings_schema.json</code> - Configuration</li>
+                    <li>🎨 <code>theme-integration.liquid</code> - Integration code</li>
+                    <li>📖 <code>Implementation-Guide.md</code> - Step-by-step guide</li>
+                </ul>
+            </div>
+            
+            <div class="content-card">
+                <h3>🔒 Security Features</h3>
+                <p>Advanced protection mechanisms to prevent course sharing and unauthorized access.</p>
+                
+                <div class="code-block">
+// Security layers active:
+✅ Tab uniqueness detection
+✅ Device fingerprinting
+✅ Session management
+✅ Real-time validation
+✅ Activity monitoring
+✅ Developer tools blocking
+✅ Content protection
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h3>📊 Session Monitoring</h3>
+                <p>Real-time monitoring of user activity and security violations.</p>
+                
+                <div id="monitoringData">
+                    <p><strong>Heartbeats:</strong> <span id="heartbeatCount">0</span></p>
+                    <p><strong>Last Activity:</strong> <span id="lastActivity">-</span></p>
+                    <p><strong>Tab ID:</strong> <span id="tabId">-</span></p>
+                    <p><strong>Session ID:</strong> <span id="sessionId">-</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h4>🧪 Test Security Features</h4>
+            <p>Try these actions to see how the security system responds:</p>
+            
+            <div class="test-buttons">
+                <button class="test-btn primary" onclick="testNewTab()">
+                    🆕 Try Opening New Tab
+                </button>
+                <button class="test-btn warning" onclick="testCopyURL()">
+                    📋 Copy URL to Clipboard
+                </button>
+                <button class="test-btn warning" onclick="testDevTools()">
+                    🔧 Simulate Dev Tools
+                </button>
+                <button class="test-btn danger" onclick="testRightClick()">
+                    🖱️ Test Right-Click Block
+                </button>
+            </div>
+        </div>
+        
+        <div class="content-card" style="margin-top: 2rem;">
+            <h3>💡 How It Works</h3>
+            <p>The security system operates in multiple layers:</p>
+            
+            <div class="code-block">
+1. IMMEDIATE BLOCKING (on page load)
+   ├── Check if course already open in another tab
+   ├── Verify device fingerprint matches
+   ├── Detect if opened via new window
+   └── Block direct URL access attempts
+
+2. SESSION MANAGEMENT
+   ├── Generate unique tab identifier
+   ├── Create server-side session
+   ├── Continuous heartbeat monitoring
+   └── Real-time session validation
+
+3. CONTENT PROTECTION
+   ├── Disable right-click context menu
+   ├── Block keyboard shortcuts (F12, Ctrl+U, etc.)
+   ├── Prevent text selection and copying
+   ├── Disable printing and screenshots
+   └── Detect developer tools usage
+
+4. BEHAVIORAL MONITORING
+   ├── Track user activity and idle time
+   ├── Monitor tab visibility changes
+   ├── Detect suspicious access patterns
+   └── Automatic session timeout
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Created with ❤️ by Code & Commerce</p>
+        <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
+            Ultra-Secure Course Protection System - Preventing unauthorized sharing since 2024
+        </p>
+    </div>
+    
+    <script>
+        // Update security status and session info
+        function updateSecurityStatus() {
+            const statusEl = document.getElementById('securityStatus');
+            const sessionInfoEl = document.getElementById('sessionInfo');
+            
+            if (window.courseGuard && window.courseGuard.isAuthenticated()) {
+                statusEl.className = 'status-indicator status-secure';
+                statusEl.innerHTML = '<span>✅</span> Secure Access Active';
+                
+                const sessionInfo = window.courseGuard.getSessionInfo();
+                sessionInfoEl.innerHTML = `
+                    <div><strong>Status:</strong> Authenticated ✅</div>
+                    <div><strong>Email:</strong> ${sessionInfo.email || 'N/A'}</div>
+                    <div><strong>Tab ID:</strong> ${sessionInfo.tabId || 'N/A'}</div>
+                    <div><strong>Session:</strong> ${sessionInfo.sessionId || 'N/A'}</div>
+                `;
+                
+                // Update monitoring data
+                document.getElementById('heartbeatCount').textContent = sessionInfo.heartbeatCount || 0;
+                document.getElementById('lastActivity').textContent = sessionInfo.lastActivity ? 
+                    sessionInfo.lastActivity.toLocaleTimeString() : '-';
+                document.getElementById('tabId').textContent = sessionInfo.tabId ? 
+                    sessionInfo.tabId.substring(0, 20) + '...' : '-';
+                document.getElementById('sessionId').textContent = sessionInfo.sessionId ? 
+                    sessionInfo.sessionId.substring(0, 20) + '...' : '-';
+                
+            } else {
+                statusEl.className = 'status-indicator status-warning';
+                statusEl.innerHTML = '<span>⚠️</span> Not Authenticated';
+                sessionInfoEl.innerHTML = '<div><strong>Status:</strong> Initializing or blocked</div>';
+            }
+        }
+        
+        // Test functions
+        function testNewTab() {
+            const currentUrl = window.location.href;
+            const newWindow = window.open(currentUrl, '_blank');
+            
+            setTimeout(() => {
+                alert('🚫 The new tab should show a blocking page. Check it!');
+            }, 1000);
+        }
+        
+        function testCopyURL() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('📋 URL copied! Try pasting it in a new tab or incognito window - it should be blocked!');
+            }).catch(() => {
+                alert('📋 Manual copy: ' + window.location.href + '\\n\\nTry pasting this in a new tab - it should be blocked!');
+            });
+        }
+        
+        function testDevTools() {
+            alert('🔧 Try opening developer tools with F12 or Ctrl+Shift+I - it should be blocked!');
+        }
+        
+        function testRightClick() {
+            alert('🖱️ Try right-clicking anywhere on this page - the context menu should be disabled!');
+        }
+        
+        // Update status every 2 seconds
+        setInterval(updateSecurityStatus, 2000);
+        
+        // Initial update after a brief delay
+        setTimeout(updateSecurityStatus, 1000);
+        
+        // Show a welcome message
+        setTimeout(() => {
+            if (window.courseGuard && window.courseGuard.isAuthenticated()) {
+                console.log('🎉 Welcome to the ultra-secure course demo!');
+                console.log('🔐 Security features are now active');
+                console.log('🧪 Try the test buttons to see security in action');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
