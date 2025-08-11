@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - Shopify Video Intro Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            animation: scaleIn 0.5s ease-out;
+        }
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 32px;
+        }
+        .tagline {
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .email-notification {
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+        .email-notification h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        .email-notification p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .steps {
+            text-align: left;
+            margin: 20px 0;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .steps h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .steps ol {
+            padding-left: 20px;
+        }
+        .steps li {
+            color: #666;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            animation: loading 2s ease-out;
+        }
+        @keyframes loading {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        .support-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #888;
+        }
+        .support-info a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .support-info a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✓</div>
+        <h1>Payment Successful!</h1>
+        <p class="tagline">Welcome to the Shopify Video Intro Guide</p>
+        
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        
+        <p>Thank you for your purchase! Your payment has been successfully processed.</p>
+        
+        <div class="email-notification">
+            <h3>📧 Check Your Email</h3>
+            <p>We've sent your guide access link to the email address you provided.</p>
+            <p><strong>Please allow 1-2 minutes for the email to arrive.</strong></p>
+            <p>Don't forget to check your spam/junk folder if you don't see it in your inbox.</p>
+        </div>
+        
+        <div class="steps">
+            <h3>What's Next?</h3>
+            <ol>
+                <li><strong>Check your email</strong> for the access link (sent from our system)</li>
+                <li><strong>Click the secure link</strong> in the email to access your guide</li>
+                <li><strong>Bookmark the page</strong> for easy access (link valid for 30 days)</li>
+                <li><strong>Start learning</strong> with our comprehensive Shopify video intro guide</li>
+            </ol>
+        </div>
+        
+        <div class="support-info">
+            <p>Need help? Contact us at <a href="mailto:support@example.com">support@example.com</a></p>
+            <p>Please include your payment ID in any support requests.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-redirect to home after 30 seconds
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 30000);
+    </script>
+</body>
+</html>

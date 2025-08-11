@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invalid Access Token - Shopify Video Intro Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            color: #dc3545;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .error-details {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 25px 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+        .error-details strong {
+            color: #721c24;
+        }
+        .help-list {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+        .help-list li {
+            color: #666;
+            margin: 8px 0;
+            list-style-type: disc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">⚠️</div>
+        <h1>Invalid Access Token</h1>
+        <p>The access token you're using is invalid or has been tampered with.</p>
+        
+        <div class="error-details">
+            <strong>Possible reasons:</strong>
+            <ul class="help-list">
+                <li>The link has been modified or corrupted</li>
+                <li>You're using an old or expired link</li>
+                <li>The token was not properly generated</li>
+                <li>Security validation failed</li>
+            </ul>
+        </div>
+        
+        <p><strong>How to fix this:</strong></p>
+        <ul class="help-list">
+            <li>Use the original link from your email</li>
+            <li>Check if you received a newer access email</li>
+            <li>Contact support if the problem persists</li>
+        </ul>
+        
+        <a href="/" class="btn">Go to Purchase Page</a>
+    </div>
+</body>
+</html>
