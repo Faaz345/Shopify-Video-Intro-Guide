@@ -5,7 +5,8 @@
   "private": true,
   "main": "server-shopify.js",
   "scripts": {
-    "start": "node server-shopify.js",
+    "start": "node server-production.js",
+    "start:production": "node server-production.js",
     "dev": "nodemon server-shopify.js",
     "legacy": "node server.js",
     "start:secure": "node secure/server.js",
