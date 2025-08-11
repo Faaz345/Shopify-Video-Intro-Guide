@@ -83,14 +83,43 @@ const razorpay = new Razorpay({
 // JWT Secret
 const GUIDE_JWT_SECRET = process.env.GUIDE_JWT_SECRET || 'my_super_secret_jwt_key_for_development_2024';
 
-// Email configuration
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD
+// Email configuration with validation
+let transporter = null;
+let emailEnabled = false;
+
+if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+    try {
+        transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_APP_PASSWORD
+            },
+            tls: {
+                rejectUnauthorized: false // Allow self-signed certificates
+            }
+        });
+        
+        // Verify transporter configuration
+        transporter.verify((error, success) => {
+            if (error) {
+                console.error('❌ Email configuration error:', error.message);
+                console.error('   Please check your Gmail credentials');
+                emailEnabled = false;
+            } else {
+                console.log('✅ Email service ready');
+                emailEnabled = true;
+            }
+        });
+    } catch (error) {
+        console.error('❌ Failed to create email transporter:', error.message);
+        emailEnabled = false;
     }
-});
+} else {
+    console.warn('⚠️  Email service disabled - Gmail credentials not configured');
+    console.warn('   Set GMAIL_USER and GMAIL_APP_PASSWORD to enable email notifications');
+    emailEnabled = false;
+}
 
 // Course price
 const COURSE_PRICE = parseInt(process.env.COURSE_PRICE || '599');
@@ -171,18 +200,33 @@ app.post('/api/verify-payment', async (req, res) => {
         const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
         const accessUrl = `${BASE_URL}/guide/access?token=${jwtToken}`;
 
-        // Send email
-        await sendAccessEmail(customer_email, {
+        // Send email (but don't fail if email service is down)
+        const emailSent = await sendAccessEmail(customer_email, {
             payment_id: razorpay_payment_id,
             order_id: razorpay_order_id,
             accessUrl: accessUrl
         });
 
-        res.json({
+        // Prepare response based on email status
+        const response = {
             success: true,
-            message: 'Payment verified! Check your email for guide access.',
-            payment_id: razorpay_payment_id
-        });
+            payment_id: razorpay_payment_id,
+            message: emailSent 
+                ? 'Payment verified! Check your email for guide access.'
+                : 'Payment verified! Email service is currently unavailable.',
+        };
+
+        // If email failed, include the access URL in the response
+        if (!emailSent) {
+            response.accessUrl = accessUrl;
+            response.note = 'Please save this access URL to access your guide';
+            console.log('\n⚠️  IMPORTANT: Email not sent. Access URL for customer:');
+            console.log('   Email:', customer_email);
+            console.log('   Access URL:', accessUrl);
+            console.log('');
+        }
+
+        res.json(response);
 
     } catch (error) {
         console.error('Payment verification error:', error);
@@ -286,6 +330,14 @@ app.get('/success', (req, res) => {
 
 // Email sending function
 async function sendAccessEmail(email, details) {
+    // Check if email service is enabled
+    if (!emailEnabled || !transporter) {
+        console.warn('⚠️  Email service is disabled - cannot send access email to:', email);
+        console.warn('   Access URL would have been:', details.accessUrl);
+        console.warn('   Please configure GMAIL_USER and GMAIL_APP_PASSWORD to enable email notifications');
+        return false;
+    }
+
     const mailOptions = {
         from: {
             name: 'Code & Commerce',
@@ -313,9 +365,12 @@ async function sendAccessEmail(email, details) {
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log('Access email sent to:', email);
+        console.log('✅ Access email sent to:', email);
+        return true;
     } catch (error) {
-        console.error('Email error:', error);
+        console.error('❌ Email sending failed:', error.message);
+        console.error('   Please check your Gmail App Password configuration');
+        return false;
     }
 }
 
@@ -349,6 +404,7 @@ app.get('/api/env-status', (req, res) => {
             // Email
             GMAIL_USER: process.env.GMAIL_USER || 'NOT SET',
             GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? '✅ Set' : '❌ NOT SET',
+            EMAIL_SERVICE_STATUS: emailEnabled ? '✅ Active' : '❌ Disabled',
             
             // Security
             GUIDE_JWT_SECRET: process.env.GUIDE_JWT_SECRET ? '✅ Set' : '⚠️ Using default',
