@@ -2,7 +2,8 @@ import { NextResponse, NextRequest } from 'next/server'
 import { jwtVerify } from 'jose'
 
 const COOKIE = 'sc_session'
-const PUBLIC = [/^\/_next\//, /^\/favicon\.ico$/, /^\/robots\.txt$/, /^\/sitemap\.xml$/, /^\/unauthorized$/]
+// Allow public assets, health checks, the unauthorized page, and the session-establishing /set route
+const PUBLIC = [/^\/_next\//, /^\/favicon\.ico$/, /^\/robots\.txt$/, /^\/sitemap\.xml$/, /^\/unauthorized$/, /^\/set$/]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
@@ -24,5 +25,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/|favicon.ico|robots.txt|sitemap.xml|unauthorized).*)'],
+  // Exclude the same public routes from the matcher as an extra safeguard
+  matcher: ['/((?!_next/|favicon.ico|robots.txt|sitemap.xml|unauthorized|set).*)'],
 }

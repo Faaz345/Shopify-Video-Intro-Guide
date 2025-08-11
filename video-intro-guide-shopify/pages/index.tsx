@@ -47,7 +47,7 @@ const markup = `
       <button class="copy-btn" onclick="copyToClipboard(this)"><img src="/Shopify_logo_2018.svg" alt="Shopify Icon" /> Copy video-intro.liquid</button>
     </div>
     <p>📸 (Image for pasting snippet)</p>
-    <img src="/Images/Add Snippet – `video-intro.liquid` step 2.png" alt="Add Snippet – video-intro.liquid" style="width: 100%; border-radius: 8px; margin: 10px 0;" />
+    <img src="/Images/Add Snippet – \`video-intro.liquid\` step 2.png" alt="Add Snippet – video-intro.liquid" style="width: 100%; border-radius: 8px; margin: 10px 0;" />
     <div class="nav-buttons"><button class="nav-btn" onclick="prevStep(2)">Previous</button><button class="nav-btn" onclick="nextStep(4)">Next Step</button></div>
   </div>
   <div id="step4" class="step">
@@ -58,7 +58,7 @@ const markup = `
       <button class="copy-btn" onclick="copyToClipboard(this)"><img src="/Shopify_logo_2018.svg" alt="Shopify Icon" /> Copy settings_schema.json</button>
     </div>
     <p>📸 (Image for settings_schema.json)</p>
-    <img src="/Images/Update `settings_schema.json`.png" alt="Update settings_schema.json" style="width: 100%; border-radius: 8px; margin: 10px 0;" />
+    <img src="/Images/Update \`settings_schema.json\`.png" alt="Update settings_schema.json" style="width: 100%; border-radius: 8px; margin: 10px 0;" />
     <div class="nav-buttons"><button class="nav-btn" onclick="prevStep(3)">Previous</button><button class="nav-btn" onclick="nextStep(5)">Next Step</button></div>
   </div>
   <div id="step5" class="step">
@@ -71,7 +71,7 @@ const markup = `
       <button class="copy-btn" onclick="copyToClipboard(this)"><img src="/Shopify_logo_2018.svg" alt="Shopify Icon" /> Copy theme.liquid snippet</button>
     </div>
     <p>📸 (Image for theme.liquid)</p>
-    <img src="/Images/Embed Snippet in `theme.liquid`.png" alt="Embed Snippet in theme.liquid" style="width: 100%; border-radius: 8px; margin: 10px 0;" />
+    <img src="/Images/Embed Snippet in \`theme.liquid\`.png" alt="Embed Snippet in theme.liquid" style="width: 100%; border-radius: 8px; margin: 10px 0;" />
     <div class="nav-buttons"><button class="nav-btn" onclick="prevStep(4)">Previous</button><button class="nav-btn" onclick="nextStep(6)">Next Step</button></div>
   </div>
   <div id="step6" class="step">

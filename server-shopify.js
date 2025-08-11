@@ -1640,19 +1640,51 @@ const secureAccessTokens = new Map();
 const activeUserSessions = new Map(); // Track active user sessions
 const deviceRestrictions = new Map(); // Track device restrictions
 
-// Generate secure access token
+// Import JWT library
+const jwt = require('jsonwebtoken');
+
+// JWT secret - should match the guide website's GUIDE_JWT_SECRET
+const GUIDE_JWT_SECRET = process.env.GUIDE_JWT_SECRET || 'my_super_secret_jwt_key_for_development_2024';
+
+// Generate JWT token for guide access
+function generateJWTToken(email, paymentDetails) {
+    const payload = {
+        email: email,
+        isPaid: true,
+        orderId: paymentDetails.order_id,
+        paymentId: paymentDetails.payment_id,
+        purchaseDate: new Date().toISOString(),
+        courseAccess: 'shopify-video-intro-guide'
+    };
+    
+    // Sign the token with 30 days expiry
+    return jwt.sign(payload, GUIDE_JWT_SECRET, { 
+        algorithm: 'HS256',
+        expiresIn: '30d' 
+    });
+}
+
+// Generate secure access token (legacy function for backward compatibility)
 function generateSecureToken() {
     return crypto.randomBytes(32).toString('hex') + '_' + Date.now();
 }
 
 // Create secure guide access
 function createCourseAccess(email, paymentDetails) {
+    // Generate JWT token for the guide website
+    const jwtToken = generateJWTToken(email, paymentDetails);
+    
+    // Also generate a legacy token for backward compatibility
     const accessToken = generateSecureToken();
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 365); // 1 year access
+
+    // Use the protected guide server URL (port 3006)
+    const PROTECTED_GUIDE_URL = process.env.PROTECTED_GUIDE_URL || 'http://localhost:3006';
     
     const accessData = {
         token: accessToken,
+        jwtToken: jwtToken,
         email: email,
         paymentId: paymentDetails.payment_id,
         orderId: paymentDetails.order_id,
@@ -1669,11 +1701,13 @@ function createCourseAccess(email, paymentDetails) {
     
     // Log the secure access creation
     console.log(`🔐 Secure guide access created for: ${email}`);
-    console.log(`🎟️ Access token: ${accessToken.substring(0, 16)}...`);
+    console.log(`🎟️ JWT token generated (first 50 chars): ${jwtToken.substring(0, 50)}...`);
+    console.log(`🌐 Protected Guide URL: ${PROTECTED_GUIDE_URL}`);
     
+    // Use JWT token in the URL for the protected guide server
     return {
-        accessToken,
-        courseUrl: `https://shopify-intro-guide.vercel.app/?token=${accessToken}&email=${encodeURIComponent(email)}`,
+        accessToken: jwtToken,  // Return JWT token
+        courseUrl: `${PROTECTED_GUIDE_URL}/access?token=${jwtToken}`,  // Use /access endpoint with JWT
         expiryDate
     };
 }

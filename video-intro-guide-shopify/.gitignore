@@ -6,6 +6,10 @@ node_modules/
 out/
 .vercel/
 
+# Ignore accidental nested copy of this app directory (prevents repo bloat and deploy confusion)
+/VIDEO-INTRO-GUIDE-SHOPIFY/
+/video-intro-guide-shopify/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
