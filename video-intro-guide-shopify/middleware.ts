@@ -1,10 +1,10 @@
 import { NextResponse, NextRequest } from 'next/server'
-import jwt from 'jsonwebtoken'
+import { jwtVerify } from 'jose'
 
 const COOKIE = 'sc_session'
 const PUBLIC = [/^\/_next\//, /^\/favicon\.ico$/, /^\/robots\.txt$/, /^\/sitemap\.xml$/, /^\/unauthorized$/]
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   if (PUBLIC.some((p) => p.test(pathname))) return NextResponse.next()
 
@@ -14,7 +14,9 @@ export function middleware(req: NextRequest) {
   try {
     const secret = process.env.GUIDE_JWT_SECRET
     if (!secret) return NextResponse.redirect(new URL('/unauthorized', req.url))
-    jwt.verify(token, secret)
+
+    const encoder = new TextEncoder()
+    await jwtVerify(token, encoder.encode(secret), { algorithms: ['HS256'] })
     return NextResponse.next()
   } catch {
     return NextResponse.redirect(new URL('/unauthorized', req.url))
